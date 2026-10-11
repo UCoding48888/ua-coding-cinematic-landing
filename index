@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UA CODING PROJECTS — Cinematic Developer Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          uaBg: '#091312',
+          uaPaper: '#112220',
+          uaCard: '#162C2A',
+          uaInk: '#E0ECE9',
+          uaMuted: '#8EA4A0',
+          uaTeal: '#0FF4C6',
+          uaTealDark: '#0A9E80',
+          uaAmber: '#FF9F43',
+          uaAmberGlow: 'rgba(255, 159, 67, 0.25)',
+          uaLine: 'rgba(15, 244, 198, 0.12)'
+        },
+        fontFamily: {
+          serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+          sans: ['"Manrope"', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --bg: #091312;
+    --paper: #112220;
+    --ink: #E0ECE9;
+    --teal: #0FF4C6;
+    --amber: #FF9F43;
+    --ease: cubic-bezier(.2,.7,.1,1);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Manrope', sans-serif; overflow-x: hidden; }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #091312; }
+  ::-webkit-scrollbar-thumb { background: #1a3835; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #0FF4C6; }
+
+  /* Glow Effects */
+  .glow-teal { text-shadow: 0 0 30px rgba(15, 244, 198, 0.4); }
+  .glow-amber { text-shadow: 0 0 30px rgba(255, 159, 67, 0.4); }
+  .box-glow { box-shadow: 0 20px 50px -10px rgba(15, 244, 198, 0.15); }
+  .amber-glow { box-shadow: 0 20px 50px -10px rgba(255, 159, 67, 0.2); }
+
+  /* Reveal Animations */
+  .rv { opacity: 0; transform: translateY(20px); filter: blur(4px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), filter 0.8s var(--ease); transition-delay: calc(var(--d, 0) * 80ms); }
+  .is-revealed .rv { opacity: 1; transform: none; filter: none; }
+  
+  .up { opacity: 0; transform: translateY(30px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); transition-delay: calc(var(--d, 0) * 80ms); }
+  .up.in { opacity: 1; transform: none; }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+  .animate-pulse-glow { animation: pulseGlow 6s ease-in-out infinite; }
+</style>
+</head>
+<body class="bg-uaBg text-uaInk antialiased selection:bg-uaTeal selection:text-uaBg">
+
+  <!-- NAVIGATION -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-uaBg/80 backdrop-blur-md border-b border-uaLine">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-uaTeal to-uaTealDark flex items-center justify-center text-uaBg font-bold shadow-lg shadow-uaTeal/20 group-hover:scale-105 transition-transform">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        </div>
+        <div>
+          <span class="font-bold tracking-widest text-sm block">UA CODING</span>
+          <span class="text-[10px] font-mono text-uaTeal tracking-wider block">PROJECTS.LIBRARY // 2026</span>
+        </div>
+      </a>
+      
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#projects" class="font-mono text-xs tracking-widest text-uaMuted hover:text-uaTeal transition-colors">PROJECTS</a>
+        <a href="#showcase" class="font-mono text-xs tracking-widest text-uaMuted hover:text-uaTeal transition-colors">TERMINAL</a>
+        <a href="#metrics" class="font-mono text-xs tracking-widest text-uaMuted hover:text-uaTeal transition-colors">METRICS</a>
+        <a href="#manifesto" class="font-mono text-xs tracking-widest text-uaMuted hover:text-uaTeal transition-colors">MANIFESTO</a>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <a href="#showcase" class="hidden sm:inline-block font-mono text-xs text-uaMuted hover:text-uaInk tracking-wider">DOCS</a>
+        <a href="#projects" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-uaTeal to-teal-400 text-uaBg font-bold text-xs tracking-wider uppercase hover:opacity-90 shadow-lg shadow-uaTeal/20 transition-all hover:-translate-y-0.5">
+          Explore Code <span>→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="relative min-h-screen pt-32 pb-20 flex items-center overflow-hidden bg-gradient-to-b from-uaBg via-[#0b1b1a] to-uaBg">
+    <!-- Background Ambient Gradients -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-uaTeal/10 blur-[140px] rounded-full pointer-events-none animate-pulse-glow"></div>
+    <div class="absolute bottom-10 right-10 w-[400px] h-[400px] bg-uaAmber/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+      
+      <!-- Left Column: Copy -->
+      <div class="lg:col-span-7">
+        <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-uaPaper border border-uaLine text-xs font-mono text-uaTeal mb-6 rv" style="--d:1">
+          <span class="w-2 h-2 rounded-full bg-uaTeal animate-ping"></span>
+          UA CODING LABS · V3.8 LIVE STREAM
+        </div>
+        
+        <h1 class="font-serif text-6xl sm:text-7xl lg:text-8xl tracking-tight leading-[0.92] mb-6 rv" style="--d:2">
+          Systems that <i class="text-uaTeal italic">compile</i> with absolute grace.
+        </h1>
+        
+        <p class="text-uaMuted text-lg max-w-xl leading-relaxed mb-8 rv" style="--d:3">
+          Curated elite codebases, high-performance neural networks, and scalable web architectures crafted by top student and professional engineers at UA. Clean logic, zero bloat.
+        </p>
+        
+        <div class="flex flex-wrap items-center gap-4 rv" style="--d:4">
+          <a href="#projects" class="inline-flex items-center gap-4 px-8 py-4 rounded-full bg-gradient-to-r from-uaAmber to-amber-500 text-uaBg font-bold text-sm tracking-wide shadow-xl amber-glow hover:scale-105 transition-transform">
+            <span>Browse Repositories</span>
+            <b class="w-7 h-7 rounded-full bg-uaBg text-uaAmber flex items-center justify-center text-xs">→</b>
+          </a>
+          <a href="#showcase" class="px-6 py-4 rounded-full bg-uaPaper border border-uaLine font-mono text-xs text-uaTeal hover:border-uaTeal transition-colors">
+            $ view-terminal-demo.sh
+          </a>
+        </div>
+
+        <div class="mt-12 flex items-center gap-6 pt-6 border-t border-uaLine rv" style="--d:5">
+          <div class="flex -space-x-2">
+            <div class="w-9 h-9 rounded-full border-2 border-uaBg bg-gradient-to-tr from-uaTeal to-blue-500 flex items-center justify-center text-xs font-bold text-uaBg">UA</div>
+            <div class="w-9 h-9 rounded-full border-2 border-uaBg bg-gradient-to-tr from-uaAmber to-red-500 flex items-center justify-center text-xs font-bold text-uaBg">AI</div>
+            <div class="w-9 h-9 rounded-full border-2 border-uaBg bg-gradient-to-tr from-purple-500 to-uaTeal flex items-center justify-center text-xs font-bold text-uaBg">SYS</div>
+          </div>
+          <div>
+            <div class="text-xs font-mono text-uaInk">14,200+ COMMITS & BUILDS</div>
+            <div class="text-xs text-uaMuted">Verified production-ready modules</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Code Studio Window -->
+      <div class="lg:col-span-5 rv" style="--d:6">
+        <div class="rounded-2xl bg-uaPaper border border-uaLine box-glow overflow-hidden">
+          <!-- Window Header -->
+          <div class="px-4 py-3 bg-[#0d1a19] border-b border-uaLine flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+              <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+              <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+              <span class="font-mono text-xs text-uaMuted ml-3">ua_core_engine.py</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="inline-block px-2 py-0.5 rounded bg-uaTeal/10 text-uaTeal font-mono text-[10px]">PYTHON 3.12</span>
+              <span class="inline-block px-2 py-0.5 rounded bg-uaAmber/10 text-uaAmber font-mono text-[10px]">ASYNC</span>
+            </div>
+          </div>
+
+          <!-- Interactive Tabs -->
+          <div class="flex border-b border-uaLine bg-[#0f1f1e] font-mono text-xs">
+            <button onclick="switchTab('ai')" id="tab-ai" class="px-4 py-2.5 text-uaTeal border-b-2 border-uaTeal bg-uaCard transition-colors">Neural_Vision.py</button>
+            <button onclick="switchTab('sys')" id="tab-sys" class="px-4 py-2.5 text-uaMuted hover:text-uaInk transition-colors">Distributed_Node.rs</button>
+            <button onclick="switchTab('web')" id="tab-web" class="px-4 py-2.5 text-uaMuted hover:text-uaInk transition-colors">Canvas_Engine.js</button>
+          </div>
+
+          <!-- Code Content Area -->
+          <div class="p-5 font-mono text-xs leading-relaxed overflow-x-auto bg-[#0a1514] min-h-[260px] text-emerald-300">
+            <pre id="code-output"><code><span class="text-uaAmber">import</span> asyncio
+<span class="text-uaAmber">import</span> torch
+<span class="text-uaAmber">from</span> ua_neural <span class="text-uaAmber">import</span> VisionTransformer
+
+<span class="text-uaTeal">class</span> <span class="text-amber-200">UACodeEngine</span>:
+    <span class="text-uaTeal">def</span> <span class="text-blue-300">__init__</span>(self, model_path: str):
+        self.device = torch.device(<span class="text-emerald-400">"cuda"</span> <span class="text-uaAmber">if</span> torch.cuda.is_available() <span class="text-uaAmber">else</span> <span class="text-emerald-400">"cpu"</span>)
+        self.model = VisionTransformer.load(model_path).to(self.device)
+        print(<span class="text-emerald-400">f"[UA] Initialized tensor stream on {self.device}"</span>)
+
+    <span class="text-uaTeal">async def</span> <span class="text-blue-300">compile_stream</span>(self, payload: dict) -> dict:
+        tensor = torch.tensor(payload[<span class="text-emerald-400">'data'</span>]).to(self.device)
+        result = <span class="text-uaAmber">await</span> self.model.forward_async(tensor)
+        <span class="text-uaAmber">return</span> {<span class="text-emerald-400">"status"</span>: <span class="text-emerald-400">"compiled"</span>, <span class="text-emerald-400">"accuracy"</span>: float(result.mean())}</code></pre>
+          </div>
+
+          <!-- Window Footer Status -->
+          <div class="px-4 py-2.5 bg-[#0d1a19] border-t border-uaLine flex items-center justify-between text-[11px] font-mono text-uaMuted">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-uaTeal animate-pulse"></span>
+              <span>Status: Compiling 60fps</span>
+            </div>
+            <span class="text-uaTeal">UTF-8</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BENTO GRID PROJECTS -->
+  <section id="projects" class="py-28 relative border-t border-uaLine">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <!-- Section Header -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
+        <div class="lg:col-span-8 up">
+          <div class="font-mono text-xs text-uaAmber tracking-widest uppercase mb-3"><b>01</b> // Featured Repositories</div>
+          <h2 class="font-serif text-5xl sm:text-6xl tracking-tight">Engineered for absolute impact</h2>
+        </div>
+        <div class="lg:col-span-4 up" style="--d:2">
+          <p class="text-uaMuted text-sm leading-relaxed">
+            Every project in the UA library undergoes rigorous peer review, performance auditing, and architectural stress tests before release.
+          </p>
+        </div>
+      </div>
+
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Bento Item 1: AI Neural Engine (Large Span) -->
+        <article class="md:col-span-2 rounded-3xl bg-uaPaper border border-uaLine p-8 relative overflow-hidden group up box-glow">
+          <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-uaTeal/10 rounded-full blur-3xl group-hover:bg-uaTeal/20 transition-all"></div>
+          <div class="flex items-center justify-between mb-8">
+            <span class="font-mono text-xs text-uaTeal bg-uaTeal/10 px-3 py-1 rounded-full border border-uaTeal/20">AI / MACHINE LEARNING</span>
+            <span class="font-mono text-xs text-uaMuted">REPO #UA-AI-902</span>
+          </div>
+          <h3 class="font-serif text-4xl mb-4 group-hover:text-uaTeal transition-colors">Autonomous Tensor Vision & Object Detection Core</h3>
+          <p class="text-uaMuted text-sm max-w-xl mb-8 leading-relaxed">
+            High-performance computer vision model trained on distributed edge nodes. Optimized for real-time inference with sub-12ms latency on consumer hardware.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-8 font-mono text-[11px]">
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">PyTorch</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">CUDA C++</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">FastAPI</span>
+          </div>
+          <div class="flex items-center justify-between pt-6 border-t border-uaLine">
+            <div class="flex items-center gap-2 text-xs font-mono text-uaMuted">
+              <span>★ 1.4k Stars</span>
+              <span>•</span>
+              <span>⑂ 280 Forks</span>
+            </div>
+            <button onclick="openProjectModal('Autonomous Tensor Vision', 'High-performance computer vision model trained on distributed edge nodes. Optimized for real-time inference with sub-12ms latency on consumer hardware. Built by UA AI research group.')" class="inline-flex items-center gap-2 font-mono text-xs text-uaTeal hover:underline">
+              View Repository <span>→</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Bento Item 2: Cloud Web App -->
+        <article class="rounded-3xl bg-uaPaper border border-uaLine p-8 relative overflow-hidden group up" style="--d:1">
+          <div class="flex items-center justify-between mb-8">
+            <span class="font-mono text-xs text-uaAmber bg-uaAmber/10 px-3 py-1 rounded-full border border-uaAmber/20">WEB ARCHITECTURE</span>
+            <span class="font-mono text-xs text-uaMuted">REPO #UA-WEB-441</span>
+          </div>
+          <h3 class="font-serif text-3xl mb-4 group-hover:text-uaAmber transition-colors">HyperScale Realtime Collaboration Canvas</h3>
+          <p class="text-uaMuted text-sm mb-6 leading-relaxed">
+            Zero-latency websocket canvas synchronization engine supporting thousands of simultaneous cursors with conflict-free replication.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-8 font-mono text-[11px]">
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">React 19</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">WebSockets</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">Rust</span>
+          </div>
+          <div class="pt-6 border-t border-uaLine flex items-center justify-between">
+            <span class="text-xs font-mono text-uaMuted">★ 890 Stars</span>
+            <button onclick="openProjectModal('HyperScale Realtime Collaboration Canvas', 'Zero-latency websocket canvas synchronization engine supporting thousands of simultaneous cursors with conflict-free replication. Fully decentralized state management.')" class="font-mono text-xs text-uaAmber hover:underline">Explore ↗</button>
+          </div>
+        </article>
+
+        <!-- Bento Item 3: Distributed Systems -->
+        <article class="rounded-3xl bg-uaPaper border border-uaLine p-8 relative overflow-hidden group up" style="--d:2">
+          <div class="flex items-center justify-between mb-8">
+            <span class="font-mono text-xs text-teal-300 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">SYSTEMS / KERNEL</span>
+            <span class="font-mono text-xs text-uaMuted">REPO #UA-SYS-108</span>
+          </div>
+          <h3 class="font-serif text-3xl mb-4 group-hover:text-teal-300 transition-colors">Micro-Kernel Memory Sandbox & Security Daemon</h3>
+          <p class="text-uaMuted text-sm mb-6 leading-relaxed">
+            Lightweight isolation runtime built in Rust for securely executing untrusted user bytecode with hardware memory protection.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-8 font-mono text-[11px]">
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">Rust</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">Assembly</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">Linux Kernel</span>
+          </div>
+          <div class="pt-6 border-t border-uaLine flex items-center justify-between">
+            <span class="text-xs font-mono text-uaMuted">★ 2.1k Stars</span>
+            <button onclick="openProjectModal('Micro-Kernel Memory Sandbox', 'Lightweight isolation runtime built in Rust for securely executing untrusted user bytecode with hardware memory protection and zero-copy IPC.')" class="font-mono text-xs text-teal-300 hover:underline">Explore ↗</button>
+          </div>
+        </article>
+
+        <!-- Bento Item 4: Quantum Simulation (Medium Span) -->
+        <article class="md:col-span-2 rounded-3xl bg-uaPaper border border-uaLine p-8 relative overflow-hidden group up" style="--d:3">
+          <div class="absolute -left-10 -bottom-10 w-64 h-64 bg-uaAmber/10 rounded-full blur-3xl group-hover:bg-uaAmber/20 transition-all"></div>
+          <div class="flex items-center justify-between mb-8">
+            <span class="font-mono text-xs text-uaAmber bg-uaAmber/10 px-3 py-1 rounded-full border border-uaAmber/20">QUANTUM COMPUTING</span>
+            <span class="font-mono text-xs text-uaMuted">REPO #UA-QNT-702</span>
+          </div>
+          <h3 class="font-serif text-4xl mb-4 group-hover:text-uaAmber transition-colors">Q-Bit State Superposition & Entanglement Visualizer</h3>
+          <p class="text-uaMuted text-sm max-w-xl mb-8 leading-relaxed">
+            WebGPU-accelerated quantum gate simulator rendering multi-qubit Bloch spheres in real-time 60fps with interactive circuit builder.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-8 font-mono text-[11px]">
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">WebGPU</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">Three.js</span>
+            <span class="px-3 py-1 rounded bg-uaCard text-uaInk border border-uaLine">TypeScript</span>
+          </div>
+          <div class="flex items-center justify-between pt-6 border-t border-uaLine">
+            <div class="flex items-center gap-2 text-xs font-mono text-uaMuted">
+              <span>★ 1.1k Stars</span>
+              <span>•</span>
+              <span>⑂ 195 Forks</span>
+            </div>
+            <button onclick="openProjectModal('Q-Bit State Superposition Visualizer', 'WebGPU-accelerated quantum gate simulator rendering multi-qubit Bloch spheres in real-time 60fps with interactive circuit builder.')" class="font-mono text-xs text-uaAmber hover:underline">
+              View Repository <span>→</span>
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- METRICS SECTION -->
+  <section id="metrics" class="py-24 bg-uaPaper border-t border-b border-uaLine relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        
+        <div class="p-6 rounded-2xl bg-uaCard border border-uaLine up">
+          <span class="font-mono text-xs text-uaMuted block mb-2">ACTIVE CONTRIBUTORS</span>
+          <div class="font-serif text-5xl text-uaTeal mb-2">1,240<small>+</small></div>
+          <div class="w-full bg-uaBg h-1.5 rounded-full overflow-hidden">
+            <div class="bg-uaTeal h-full w-[85%] rounded-full"></div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-uaCard border border-uaLine up" style="--d:1">
+          <span class="font-mono text-xs text-uaMuted block mb-2">PRO REPOSITORIES</span>
+          <div class="font-serif text-5xl text-uaAmber mb-2">380<small>sz</small></div>
+          <div class="w-full bg-uaBg h-1.5 rounded-full overflow-hidden">
+            <div class="bg-uaAmber h-full w-[92%] rounded-full"></div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-uaCard border border-uaLine up" style="--d:2">
+          <span class="font-mono text-xs text-uaMuted block mb-2">GLOBAL COMPILED BUILDS</span>
+          <div class="font-serif text-5xl text-emerald-400 mb-2">2.4<small>M</small></div>
+          <div class="w-full bg-uaBg h-1.5 rounded-full overflow-hidden">
+            <div class="bg-emerald-400 h-full w-[78%] rounded-full"></div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-uaCard border border-uaLine up" style="--d:3">
+          <span class="font-mono text-xs text-uaMuted block mb-2">SYSTEM UPTIME</span>
+          <div class="font-serif text-5xl text-cyan-300 mb-2">99.9<small>%</small></div>
+          <div class="w-full bg-uaBg h-1.5 rounded-full overflow-hidden">
+            <div class="bg-cyan-300 h-full w-[99%] rounded-full"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO SECTION -->
+  <section id="manifesto" class="py-28 relative">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="rounded-3xl bg-gradient-to-b from-uaPaper to-[#0d1a19] border border-uaLine p-10 md:p-16 relative overflow-hidden up">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-uaTeal/5 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="font-mono text-xs text-uaTeal uppercase tracking-widest mb-4"><b>02</b> // The UA Code Manifesto</div>
+        <h2 class="font-serif text-4xl sm:text-6xl tracking-tight mb-8">
+          Like the Kingfisher: still until the exact moment, then exact precision.
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-uaMuted text-sm leading-relaxed">
+          <div>
+            <p class="mb-4">
+              Great software is never born from frantic motion. It requires patient observation, deep architectural planning, and zero unnecessary bloat.
+            </p>
+            <p>
+              At UA Coding Projects, our developers write code that slips effortlessly between environments—just as light bends through crystal water.
+            </p>
+          </div>
+          <div>
+            <ul class="space-y-4 font-mono text-xs text-uaInk">
+              <li class="flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-uaTeal"></span>
+                <span>Zero bloated dependencies or framework weight</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-uaAmber"></span>
+                <span>Strict type-checking and automated security audits</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>60fps hardware-accelerated animations</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span>Open-source first with transparent MIT licensing</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-16 bg-[#070e0d] border-t border-uaLine text-center md:text-left">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div>
+        <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+          <div class="w-8 h-8 rounded-lg bg-uaTeal flex items-center justify-center text-uaBg font-bold">UA</div>
+          <span class="font-bold tracking-widest text-sm">UA CODING PROJECTS</span>
+        </div>
+        <p class="text-xs font-mono text-uaMuted">Cinematic Prompt & Repository Library · Delhi NCR / Global</p>
+      </div>
+      
+      <div class="flex items-center gap-6 font-mono text-xs text-uaMuted">
+        <a href="#hero" class="hover:text-uaTeal transition-colors">Privacy</a>
+        <a href="#projects" class="hover:text-uaTeal transition-colors">Repositories</a>
+        <a href="#manifesto" class="hover:text-uaTeal transition-colors">Manifesto</a>
+        <a href="#hero" class="hover:text-uaTeal transition-colors">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CUSTOM MODAL DIALOG (No alert() used) -->
+  <div id="project-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-uaPaper border border-uaLine rounded-3xl max-w-lg w-full p-8 relative shadow-2xl">
+      <button onclick="closeProjectModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-uaCard border border-uaLine flex items-center justify-center text-uaMuted hover:text-uaInk">✕</button>
+      <div class="font-mono text-xs text-uaTeal mb-2">UA REPOSITORY DETAILS</div>
+      <h3 id="modal-title" class="font-serif text-3xl mb-4 text-uaInk">Project Title</h3>
+      <p id="modal-desc" class="text-uaMuted text-sm leading-relaxed mb-6">Project description goes here...</p>
+      <div class="flex items-center justify-between pt-6 border-t border-uaLine">
+        <span class="font-mono text-xs text-uaAmber">Status: Verified & Compiled</span>
+        <button onclick="closeProjectModal()" class="px-6 py-2.5 rounded-full bg-uaTeal text-uaBg font-bold text-xs font-mono hover:opacity-90">Close Modal</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching logic for the interactive code snippet
+    const codeSnippets = {
+      ai: `<span class="text-uaAmber">import</span> asyncio
+<span class="text-uaAmber">import</span> torch
+<span class="text-uaAmber">from</span> ua_neural <span class="text-uaAmber">import</span> VisionTransformer
+
+<span class="text-uaTeal">class</span> <span class="text-amber-200">UACodeEngine</span>:
+    <span class="text-uaTeal">def</span> <span class="text-blue-300">__init__</span>(self, model_path: str):
+        self.device = torch.device(<span class="text-emerald-400">"cuda"</span> <span class="text-uaAmber">if</span> torch.cuda.is_available() <span class="text-uaAmber">else</span> <span class="text-emerald-400">"cpu"</span>)
+        self.model = VisionTransformer.load(model_path).to(self.device)
+        print(<span class="text-emerald-400">f"[UA] Initialized tensor stream on {self.device}"</span>)
+
+    <span class="text-uaTeal">async def</span> <span class="text-blue-300">compile_stream</span>(self, payload: dict) -> dict:
+        tensor = torch.tensor(payload[<span class="text-emerald-400">'data'</span>]).to(self.device)
+        result = <span class="text-uaAmber">await</span> self.model.forward_async(tensor)
+        <span class="text-uaAmber">return</span> {<span class="text-emerald-400">"status"</span>: <span class="text-emerald-400">"compiled"</span>, <span class="text-emerald-400">"accuracy"</span>: float(result.mean())}`,
+
+      sys: `<span class="text-uaAmber">use</span> std::sync::Arc;
+<span class="text-uaAmber">use</span> tokio::sync::Mutex;
+
+<span class="text-uaTeal">pub struct</span> <span class="text-amber-200">DistributedNode</span> {
+    node_id: u64,
+    memory_pool: Arc&lt;Mutex&lt;Vec&lt;u8&gt;&gt;&gt;,
+}
+
+<span class="text-uaTeal">impl</span> DistributedNode {
+    <span class="text-uaTeal">pub async fn</span> <span class="text-blue-300">dispatch_sync</span>(&self, data: &[u8]) -> Result&lt;u64, &'static str&gt; {
+        <span class="text-uaAmber">let mut</span> pool = self.memory_pool.lock().<span class="text-uaAmber">await</span>;
+        pool.extend_from_slice(data);
+        Ok(pool.len() as u64)
+    }
+}`,
+
+      web: `<span class="text-uaAmber">import</span> { useEffect, useState } from <span class="text-emerald-400">'react'</span>;
+<span class="text-uaAmber">import</span> { createMatrixEngine } from <span class="text-emerald-400">'ua-canvas'</span>;
+
+<span class="text-uaTeal">export function</span> <span class="text-amber-200">CanvasStudio</span>() {
+  <span class="text-uaAmber">const</span> [fps, setFps] = useState(60);
+
+  useEffect(() => {
+    <span class="text-uaAmber">const</span> engine = createMatrixEngine({ target: <span class="text-emerald-400">'#viewport'</span> });
+    engine.startRenderLoop((stats) => setFps(stats.fps));
+    <span class="text-uaAmber">return</span> () => engine.destroy();
+  }, []);
+
+  <span class="text-uaAmber">return</span> &lt;div className="ua-canvas-box"&gt;FPS: {fps}&lt;/div&gt;;
+}`
+    };
+
+    function switchTab(tabKey) {
+      document.getElementById('code-output').innerHTML = `<code>${codeSnippets[tabKey]}</code>`;
+      ['ai', 'sys', 'web'].forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if(t === tabKey) {
+          btn.className = "px-4 py-2.5 text-uaTeal border-b-2 border-uaTeal bg-uaCard transition-colors";
+        } else {
+          btn.className = "px-4 py-2.5 text-uaMuted hover:text-uaInk transition-colors";
+        }
+      });
+    }
+
+    // Modal Control Functions (Replacing alert)
+    function openProjectModal(title, desc) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerText = desc;
+      const modal = document.getElementById('project-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeProjectModal() {
+      const modal = document.getElementById('project-modal');
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    // Intersection Observer for scroll animations
+    document.addEventListener('DOMContentLoaded', () => {
+      // Reveal hero elements
+      setTimeout(() => {
+        document.getElementById('hero').classList.add('is-revealed');
+      }, 100);
+
+      // Scroll observer for bento grid and sections
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.up').forEach(el => observer.observe(el));
+    });
+  </script>
+</body>
+</html>
